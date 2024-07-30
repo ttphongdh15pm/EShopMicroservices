@@ -6,10 +6,10 @@
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("/products", async (CreateProductRequest request, ISender sender) =>
+            app.MapPost("/products", async (ISender sender, CreateProductRequest request, CancellationToken cancellationToken) =>
             {
                 var command = request.Adapt<CreateProductCommand>();
-                var result = await sender.Send(command);
+                var result = await sender.Send(command, cancellationToken);
                 var response = result.Adapt<CreateProductResponse>();
                 return Results.Created($"/products/{response.Id}", response);
             }).WithName("CreateProduct")
