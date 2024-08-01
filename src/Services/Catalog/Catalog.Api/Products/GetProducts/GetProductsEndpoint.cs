@@ -1,8 +1,7 @@
-﻿using Catalog.Api.Models;
-
-namespace Catalog.Api.Products.GetProducts
+﻿namespace Catalog.Api.Products.GetProducts
 {
-    public record GetProductsResponse(int Total, List<Product> Products);
+    public record GetProductsRequest(int? PageNumber = 1, int? PageSize = 10);
+    public record GetProductsResponse(IEnumerable<Product> Products);
     public class GetProductsEndpoint : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
@@ -10,11 +9,12 @@ namespace Catalog.Api.Products.GetProducts
             app.MapGet("/products", GetProductsAsync);
         }
 
-        private async Task<IResult> GetProductsAsync(ISender sender, CancellationToken cancellationToken)
+        private async Task<IResult> GetProductsAsync(ISender sender, [AsParameters] GetProductsRequest request, CancellationToken cancellationToken)
         {
-            var getProductsQuery = new GetProductsQuery();
-            var result = await sender.Send(getProductsQuery, cancellationToken);
-            return Results.Ok(result.Adapt<GetProductsResponse>());
+            var query = request.Adapt<GetProductsQuery>();
+            var result = await sender.Send(query, cancellationToken);
+            var response = result.Adapt<GetProductsResponse>();
+            return Results.Ok(response);
         }
     }
 }
