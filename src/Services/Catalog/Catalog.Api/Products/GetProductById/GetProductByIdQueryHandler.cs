@@ -1,4 +1,6 @@
-﻿namespace Catalog.Api.Products.GetProductById
+﻿using Catalog.Api.Exceptions;
+
+namespace Catalog.Api.Products.GetProductById
 {
 
     public record GetProductByIdQuery(Guid Id) : IQuery<GetProductByIdResult>;
@@ -10,6 +12,10 @@
             var product = await document.Query<Product>()
                 .Where(prod => prod.Id == request.Id)
                 .FirstOrDefaultAsync(cancellationToken);
+            if (product == null)
+            {
+                throw new ProductNotFoundException(request.Id);
+            }
             return new GetProductByIdResult(product);
         }
     }
