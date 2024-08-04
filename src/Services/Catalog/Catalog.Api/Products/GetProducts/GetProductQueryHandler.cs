@@ -1,17 +1,20 @@
-﻿using Marten.Pagination;
+﻿using BuildingBlocks.Pagination;
+using Marten.Pagination;
 
 namespace Catalog.Api.Products.GetProducts
 {
-    public record GetProductsQuery(int? PageNumber = 1, int? PageSize = 10) : IQuery<GetProductsResult>;
-    public record GetProductsResult(IEnumerable<Product> Products);
-
+    public record GetProductsQuery(PaginationRequest PaginationRequest) : IQuery<GetProductsResult>;
+    public record GetProductsResult(PaginatedResult<Product> Products);
     public class GetProductQueryHandler(IDocumentSession document) : IQueryHandler<GetProductsQuery, GetProductsResult>
     {
-        public async Task<GetProductsResult> Handle(GetProductsQuery request, CancellationToken cancellationToken)
+        public async Task<GetProductsResult> Handle(GetProductsQuery query, CancellationToken cancellationToken)
         {
-            var query = document.Query<Product>();
-            var products = await query.ToPagedListAsync(request.PageNumber ?? 1, request.PageSize ?? 10, cancellationToken);
-            return new GetProductsResult(products);
+            var pageIndex = query.PaginationRequest.PageIndex;
+            var pageSize = query.PaginationRequest.PageSize;
+            var queryExpression = document.Query<Product>();
+            var totalCount = await queryExpression.LongCountAsync(cancellationToken);
+            var products = await queryExpression.ToPagedListAsync(pageIndex, pageSize, cancellationToken);
+            return new GetProductsResult(new PaginatedResult<Product>(pageIndex, pageSize, totalCount, products));
         }
     }
 }

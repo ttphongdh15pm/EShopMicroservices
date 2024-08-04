@@ -25,12 +25,10 @@ builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 builder.Services.Decorate<IBasketRepository, CachedBasketRepository>();
-
 builder.Services.AddStackExchangeRedisCache(opts =>
 {
     opts.Configuration = builder.Configuration.GetConnectionString("Redis");
 });
-
 builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(opts =>
 {
     opts.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]!);
@@ -46,6 +44,8 @@ builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("Database")!)
     .AddRedis(builder.Configuration.GetConnectionString("Redis")!);
+
+builder.Services.AddMessageBroker(builder.Configuration);
 
 var app = builder.Build();
 

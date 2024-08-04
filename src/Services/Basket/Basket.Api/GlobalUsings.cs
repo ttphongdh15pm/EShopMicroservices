@@ -6,3 +6,5 @@ global using FluentValidation;
 global using BuildingBlocks.Behaviors;
 global using BuildingBlocks.Exceptions.Handler;
 global using BuildingBlocks.CQRS;
+global using BuildingBlocks.Messaging.MassTransit;
+global using Basket.Api.Dtos;
