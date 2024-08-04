@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering.Domain", "Services
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering.Application", "Services\Ordering\Ordering.Application\Ordering.Application.csproj", "{BE2D5499-1F7C-460A-886A-CA73E37E3E53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering.Infratructure", "Services\Ordering\Ordering.Infratructure\Ordering.Infratructure.csproj", "{68C0CF76-D41E-4B03-93AB-DBFE0E50CC55}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering.Infrastructure", "Services\Ordering\Ordering.Infratructure\Ordering.Infrastructure.csproj", "{68C0CF76-D41E-4B03-93AB-DBFE0E50CC55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
